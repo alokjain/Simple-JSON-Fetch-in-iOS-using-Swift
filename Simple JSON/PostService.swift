@@ -34,10 +34,10 @@ class PostService {
                 println("Error parsing json: \(jsonError)")
             }
             else {
-                let title:String! = json[0]["title"] as? String
-                println(json[0]["title"])
+                //let items:NSArray! = json[0]["products"] as? NSArray
+                //let t:String! = items[0]["tilte"] as? String
+                callback(json)
             }
-            callback(json)
             //var error:NSError?
             //var response = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSDictionary
             //callback(response)

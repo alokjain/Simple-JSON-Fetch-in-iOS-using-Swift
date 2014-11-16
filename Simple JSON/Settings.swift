@@ -9,5 +9,5 @@
 import Foundation
 
 class Settings {
-    var viewPosts = "http://api.androidhive.info/json/movies.json"
+    var viewPosts = "http://findmyboat.in/m/list_boats.php"
 }

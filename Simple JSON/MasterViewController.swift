@@ -20,11 +20,12 @@ class MasterViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "FindmyBoat.in"
+        self.navigationController?.navigationBar.barTintColor = UIColorFromRGB(0x99CCFF)
         // Do any additional setup after loading the view, typically from a nib.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem()
-        
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
-        self.navigationItem.rightBarButtonItem = addButton
+//        
+//        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
+//        self.navigationItem.rightBarButtonItem = addButton
         
         service = PostService()
         service.getPosts {
@@ -34,13 +35,14 @@ class MasterViewController: UITableViewController {
     }
     
     func loadPosts(posts : NSArray) {
-        for post in posts{
-            //var postID = id
-            var title = post["title"]! as String
-            var rating: Float = post["rating"]! as Float
-            var releaseYear = post["releaseYear"]! as Int
-            var image = post["image"]! as String
-            var postObj = Post(id:1,title:title,rating:rating,releaseYear:releaseYear, image:image)
+        var items:NSArray! = posts[0]["products"] as?NSArray
+        for item in items{
+            var id:Int! = (item["id"]! as String).toInt()
+            var title  = item["tilte"]! as String
+            var type:Int! = (item["type"]! as String).toInt()
+            var price:Int! = (item["price"]! as String).toInt()
+            var image = item["photo1"]! as String
+            var postObj = Post(id:id,title:title,type:1,price:1, image:image)
             postsCollection.append(postObj)
             dispatch_async(dispatch_get_main_queue()) {
                 self.tableView.reloadData()
@@ -79,13 +81,13 @@ class MasterViewController: UITableViewController {
         
         let object = postsCollection[indexPath.row]
         cell.textLabel.text = object.title
-        //cell.detailTextLabel?.text = "Rating : \(object.rating)"
-        //cell.imageView.image = UIImage(named: "Thumb")
+        cell.detailTextLabel?.text = object.title
+        
         var image = self.imageCache["thumb"]
         
         if( image == nil ) {
             // If the image does not exist, we need to download it
-            var imgURL: NSURL? = NSURL(string: object.image)
+            var imgURL: NSURL? = NSURL(string: "http://findmyboat.in/upload/uploads/thumb_\(object.image)")
             
             // Download an NSData representation of the image at the URL
             let request: NSURLRequest = NSURLRequest(URL: imgURL!)
@@ -123,15 +125,23 @@ class MasterViewController: UITableViewController {
         return true
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    /*override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             postsCollection.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
-    }
+    }*/
     
+    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
     
 }
 

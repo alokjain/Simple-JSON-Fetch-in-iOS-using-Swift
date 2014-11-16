@@ -11,15 +11,15 @@ import Foundation
 class Post {
     var id : Int
     var title : String
-    var rating : Float
-    var releaseYear : Int
+    var type : Int
+    var price : Int
     var image : String
     
-    init(id:Int, title:String, rating:Float, releaseYear:Int, image: String) {
+    init(id:Int, title:String, type:Int, price:Int, image: String) {
         self.id = id
         self.title = title
-        self.rating = rating
-        self.releaseYear = releaseYear
+        self.type = type
+        self.price = price
         self.image = image
     }
     
